@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como Publicar Artigos no Blog — Guia Sanity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #000000;
+  --surface-1: #111111;
+  --surface-2: #1a1a1a;
+  --surface-3: #222222;
+  --border:    #2a2a2a;
+  --border-2:  #333333;
+  --text-1:    #ffffff;
+  --text-2:    #a0a0a0;
+  --text-3:    #555555;
+  --accent:    #ffffff;
+  --font:      'Funnel Sans', 'Inter', sans-serif;
+  --mono:      'DM Mono', monospace;
+  --sidebar-w: 220px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ─── Centering wrapper ─── */
+.outer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ─── Layout ─── */
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+/* ─── Sidebar ─── */
+.sidebar {
+  position: sticky;
+  top: 5rem;
+  align-self: start;
+  border-right: 1px solid var(--border);
+  padding: 0 1.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.sidebar-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 1.25rem;
+}
+
+.sidebar-heading {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-1);
+  line-height: 1.4;
+  margin-bottom: 1.75rem;
+}
+
+.nav { list-style: none; display: flex; flex-direction: column; gap: 1px; }
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--text-3);
+  transition: color .15s, background .15s;
+}
+.nav a:hover { color: var(--text-2); background: var(--surface-1); }
+.nav li.active a { color: var(--text-1); background: var(--surface-2); }
+
+.nav-n {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text-3);
+  min-width: 16px;
+}
+.nav li.active .nav-n { color: var(--text-2); }
+
+.sidebar-footer {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.sidebar-footer p {
+  font-size: 11.5px;
+  color: var(--text-3);
+  line-height: 1.7;
+}
+.sidebar-footer a {
+  color: var(--text-2);
+  text-decoration: none;
+  font-size: 11.5px;
+}
+.sidebar-footer a:hover { color: var(--text-1); }
+
+/* ─── Main ─── */
+.main { min-width: 0; padding-left: 3rem; }
+
+/* ─── Hero ─── */
+.hero {
+  padding: 6rem 3rem 3.5rem 0;
+}
+
+.hero-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 1.25rem;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--text-1);
+  margin-bottom: 1rem;
+  letter-spacing: -.02em;
+}
+
+.hero-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text-2);
+  line-height: 1.65;
+  max-width: 520px;
+}
+
+
+
+/* ─── Section ─── */
+.section {
+  border-top: 1px solid var(--border);
+  padding: 3rem 3rem 3rem 0;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+.section.visible { opacity: 1; transform: none; }
+
+/* Section header */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 2rem;
+}
+.sec-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  letter-spacing: .1em;
+}
+.sec-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-1);
+  letter-spacing: -.01em;
+}
+
+/* ─── Two-col content: steps + image ─── */
+.sec-body {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ─── Steps ─── */
+.steps { display: flex; flex-direction: column; gap: 0; }
+
+.step {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 14px;
+  padding: 13px 14px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  align-items: start;
+  transition: background .15s;
+}
+.step:first-child { border-radius: 6px 6px 0 0; }
+.step:last-child  { border-bottom: none; border-radius: 0 0 6px 6px; }
+.step:only-child  { border-radius: 6px; }
+.step:hover { background: var(--surface-2); }
+
+.step-n {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  padding-top: 2px;
+  text-align: right;
+}
+.step-text {
+  font-size: 13.5px;
+  color: var(--text-2);
+  line-height: 1.55;
+  font-weight: 400;
+}
+.step-text strong { font-weight: 500; color: var(--text-1); }
+.step-sub {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 3px;
+  font-weight: 300;
+}
+
+.pill {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  color: var(--text-2);
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* ─── Image slot ─── */
+.img-slot {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: var(--surface-1);
+  border: 1px dashed var(--border-2);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s, background .2s;
+  flex-shrink: 0;
+}
+.img-slot:hover {
+  border-color: var(--text-3);
+  background: var(--surface-2);
+}
+.img-slot input[type="file"] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+.img-slot-icon {
+  width: 36px; height: 36px;
+  border: 1px solid var(--border-2);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  color: var(--text-3);
+  background: var(--surface-2);
+  transition: border-color .2s, color .2s;
+}
+.img-slot:hover .img-slot-icon { border-color: var(--text-3); color: var(--text-2); }
+.img-slot-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-3);
+  text-align: center;
+  line-height: 1.6;
+  pointer-events: none;
+  padding: 0 1rem;
+}
+.img-slot img.preview {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+  display: none;
+}
+.img-slot.has-image img.preview { display: block; }
+.img-slot.has-image .img-slot-icon,
+.img-slot.has-image .img-slot-label { display: none; }
+
+/* ─── Tip ─── */
+.tip {
+  border-left: 2px solid var(--border-2);
+  padding: 11px 14px;
+  font-size: 13px;
+  color: var(--text-3);
+  line-height: 1.6;
+  margin-top: 12px;
+  background: var(--surface-1);
+  border-radius: 0 5px 5px 0;
+  font-weight: 300;
+}
+.tip strong { font-weight: 500; color: var(--text-2); }
+
+/* ─── Publish demo ─── */
+.publish-demo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #1f4d23;
+  border: 1px solid #2e6e34;
+  color: #7ecf86;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .05em;
+  padding: 6px 14px;
+  border-radius: 4px;
+  margin-bottom: 1.25rem;
+  cursor: default;
+  user-select: none;
+}
+.publish-demo::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: #7ecf86;
+  border-radius: 50%;
+}
+
+/* ─── Format pills ─── */
+.fmt-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: .75rem;
+}
+.fmt-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.fmt-key {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--surface-3);
+  border: 1px solid var(--border-2);
+  color: var(--text-1);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* ─── FAQ ─── */
+.faq-list { display: flex; flex-direction: column; gap: 0; }
+
+.faq-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.faq-item:last-child { border-bottom: none; }
+
+.faq-q {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin-bottom: 5px;
+}
+.faq-a {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+.faq-a .pill { vertical-align: middle; }
+
+/* ─── Contact section ─── */
+.contact-section {
+  padding: 3rem 3rem 5rem 0;
+  border-top: 1px solid var(--border);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .45s ease, transform .45s ease;
+}
+.contact-section.visible { opacity: 1; transform: none; }
+
+.contact-block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.75rem 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  background: var(--surface-1);
+}
+.contact-text p:first-child {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin-bottom: 4px;
+}
+.contact-text p:last-child {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-2);
+}
+.contact-phone {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-1);
+  letter-spacing: .04em;
+  text-decoration: none;
+  border: 1px solid var(--border-2);
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: border-color .2s, background .2s;
+  white-space: nowrap;
+}
+.contact-phone:hover { border-color: var(--text-3); background: var(--surface-2); }
+
+/* ─── Scroll animation ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero { animation: fadeUp .5s ease both; }
+
+/* ─── Mobile ─── */
+@media (max-width: 800px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  .hero, .section, .contact-section { padding: 2.5rem 1.5rem; }
+  .hero h1 { font-size: 30px; }
+  .sec-body { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="outer">
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <p class="sidebar-label">Sanity Studio</p>
+    <p class="sidebar-heading">Como publicar artigos no blog</p>
+
+    <nav>
+      <ul class="nav" id="nav">
+        <li data-sec="s1"><a href="#s1"><span class="nav-n">01</span> Acessando o painel</a></li>
+        <li data-sec="s2"><a href="#s2"><span class="nav-n">02</span> Criando um artigo</a></li>
+        <li data-sec="s3"><a href="#s3"><span class="nav-n">03</span> Escrevendo o conteúdo</a></li>
+        <li data-sec="s4"><a href="#s4"><span class="nav-n">04</span> Publicando</a></li>
+        <li data-sec="s5"><a href="#s5"><span class="nav-n">05</span> Editando artigos</a></li>
+        <li data-sec="s6"><a href="#s6"><span class="nav-n">06</span> Dúvidas frequentes</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>Dúvidas? Fale diretamente:</p>
+      <a href="tel:+5555999053835">+55 55 99905 3835</a>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="main">
+
+    <!-- Hero -->
+    <section class="hero">
+      <p class="hero-kicker">Guia de uso · Sanity Studio</p>
+      <h1>Como publicar<br>artigos no blog</h1>
+      <p class="hero-desc">Passo a passo para criar, formatar e publicar conteúdo pelo painel do Sanity Studio — sem precisar de conhecimento técnico.</p>
+
+    </section>
+
+    <!-- ── 01 Acessando o painel ── -->
+    <section class="section" id="s1">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <h2 class="sec-title">Acessando o painel</h2>
+      </div>
+      <div class="sec-body">
+        <div>
+          <div class="steps">
+            <div class="step">
+              <span class="step-n">1</span>
+              <div>
+                <p class="step-text">Abra o navegador e acesse o endereço do seu Sanity Studio</p>
+                <p class="step-sub">O link foi enviado junto com suas credenciais de acesso</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">2</span>
+              <div>
+                <p class="step-text">Faça login com o <strong>e-mail</strong> e <strong>senha</strong> que você recebeu</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">3</span>
+              <div>
+                <p class="step-text">Você verá o painel do Sanity Studio — é aqui que todo o conteúdo do blog é gerenciado</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <input type="file" accept="image/*" onchange="loadPreview(this)">
+          <img class="preview" alt="">
+          <div class="img-slot-icon">⌗</div>
+          <p class="img-slot-label">Adicionar print<br>Visão geral do painel</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 02 Criando um novo artigo ── -->
+    <section class="section" id="s2">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2 class="sec-title">Criando um novo artigo</h2>
+      </div>
+      <div class="sec-body">
+        <div>
+          <div class="steps">
+            <div class="step">
+              <span class="step-n">1</span>
+              <div>
+                <p class="step-text">No menu lateral esquerdo, clique em <span class="pill">Post</span></p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">2</span>
+              <div>
+                <p class="step-text">Clique no botão <span class="pill">+</span> ou <span class="pill">New document</span> no canto superior</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">3</span>
+              <div>
+                <p class="step-text">A partir daqui você pode começar a preencher os campos</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <input type="file" accept="image/*" onchange="loadPreview(this)">
+          <img class="preview" alt="">
+          <div class="img-slot-icon">⌗</div>
+          <p class="img-slot-label">Adicionar print<br>Tela de novo documento</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 03 Escrevendo o conteúdo ── -->
+    <section class="section" id="s3">
+      <div class="sec-head">
+        <span class="sec-num">03</span>
+        <h2 class="sec-title">Escrevendo o conteúdo</h2>
+      </div>
+      <div class="sec-body">
+        <div>
+          <div class="steps">
+            <div class="step">
+              <span class="step-n">1</span>
+              <div>
+                <p class="step-text">Localize o campo <span class="pill">Body</span> — é onde o texto completo do artigo vai</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">2</span>
+              <div>
+                <p class="step-text">Use as opções de formatação do editor para estruturar o conteúdo</p>
+                <div class="fmt-row">
+                  <div class="fmt-item"><span class="fmt-key">B</span> Negrito</div>
+                  <div class="fmt-item"><span class="fmt-key">I</span> Itálico</div>
+                  <div class="fmt-item"><span class="fmt-key">H2</span> Título</div>
+                  <div class="fmt-item"><span class="fmt-key">H3</span> Subtítulo</div>
+                  <div class="fmt-item"><span class="fmt-key">↵</span> Novo parágrafo</div>
+                </div>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">3</span>
+              <div>
+                <p class="step-text">Use o estilo <span class="pill">Normal</span> para parágrafos comuns</p>
+              </div>
+            </div>
+          </div>
+          <div class="tip">
+            <strong>Dica:</strong> Escreva o texto primeiro no Word ou Google Docs, depois cole aqui. A formatação básica é mantida.
+          </div>
+        </div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <input type="file" accept="image/*" onchange="loadPreview(this)">
+          <img class="preview" alt="">
+          <div class="img-slot-icon">⌗</div>
+          <p class="img-slot-label">Adicionar print<br>Campo Body com editor</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 04 Publicando ── -->
+    <section class="section" id="s4">
+      <div class="sec-head">
+        <span class="sec-num">04</span>
+        <h2 class="sec-title">Publicando o artigo</h2>
+      </div>
+      <div class="sec-body">
+        <div>
+          <div class="publish-demo">Publish</div>
+          <div class="steps">
+            <div class="step">
+              <span class="step-n">1</span>
+              <div>
+                <p class="step-text">Revise os campos — especialmente <span class="pill">Title</span>, <span class="pill">Slug</span> e <span class="pill">Date</span></p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">2</span>
+              <div>
+                <p class="step-text">Clique no botão verde <strong>Publish</strong> no canto superior direito</p>
+                <p class="step-sub">O artigo aparece no site imediatamente — pode levar até 1 minuto para atualizar</p>
+              </div>
+            </div>
+          </div>
+          <div class="tip">
+            <strong>Rascunho:</strong> Para salvar sem publicar, basta fechar a janela — o Sanity salva automaticamente. O artigo só vai ao ar quando você clicar em <strong>Publish</strong>.
+          </div>
+        </div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <input type="file" accept="image/*" onchange="loadPreview(this)">
+          <img class="preview" alt="">
+          <div class="img-slot-icon">⌗</div>
+          <p class="img-slot-label">Adicionar print<br>Botão Publish</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 05 Editando artigos ── -->
+    <section class="section" id="s5">
+      <div class="sec-head">
+        <span class="sec-num">05</span>
+        <h2 class="sec-title">Editando artigos já publicados</h2>
+      </div>
+      <div class="sec-body">
+        <div>
+          <div class="steps">
+            <div class="step">
+              <span class="step-n">1</span>
+              <div>
+                <p class="step-text">No menu lateral, clique em <span class="pill">Post</span> e selecione o artigo que deseja editar</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">2</span>
+              <div>
+                <p class="step-text">Faça as alterações desejadas nos campos</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">3</span>
+              <div>
+                <p class="step-text">Clique em <strong>Publish</strong> novamente para salvar as mudanças no site</p>
+              </div>
+            </div>
+            <div class="step">
+              <span class="step-n">4</span>
+              <div>
+                <p class="step-text">Para deletar: clique nos três pontinhos <span class="pill">···</span>, escolha <strong>Delete</strong> e confirme</p>
+                <p class="step-sub">O artigo sai do site imediatamente</p>
+              </div>
+            </div>
+          </div>
+          <div class="tip" style="border-left-color:#5a3a00; color:#888; background:var(--surface-1);">
+            <strong style="color:#b87a2a;">Atenção com o Slug:</strong> Avise o desenvolvedor antes de alterar o slug de um artigo publicado — mudar quebra o link antigo.
+          </div>
+        </div>
+        <div class="img-slot" onclick="this.querySelector('input').click()">
+          <input type="file" accept="image/*" onchange="loadPreview(this)">
+          <img class="preview" alt="">
+          <div class="img-slot-icon">⌗</div>
+          <p class="img-slot-label">Adicionar print<br>Lista de posts publicados</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 06 Dúvidas frequentes ── -->
+    <section class="section" id="s6">
+      <div class="sec-head">
+        <span class="sec-num">06</span>
+        <h2 class="sec-title">Dúvidas frequentes</h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <p class="faq-q">O artigo não apareceu no site.</p>
+          <p class="faq-a">Aguarde 1–2 minutos e atualize a página. Se persistir, entre em contato.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Errei o slug depois de publicar.</p>
+          <p class="faq-a">Não altere sem avisar antes — mudar o <span class="pill">Slug</span> de um artigo já publicado quebra o link antigo. Entre em contato para fazer a correção com segurança.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Quero salvar um rascunho sem publicar.</p>
+          <p class="faq-a">Basta fechar a janela após preencher os campos. O Sanity salva automaticamente — o artigo só vai ao ar quando você clicar em <strong>Publish</strong>.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Posso editar um artigo depois de publicado?</p>
+          <p class="faq-a">Sim. Acesse o artigo pela listagem de <span class="pill">Post</span>, faça as alterações e clique em <strong>Publish</strong> novamente para aplicar as mudanças.</p>
+        </div>
+        <div class="faq-item">
+          <p class="faq-q">Qual imagem de capa usar no campo Thumb?</p>
+          <p class="faq-a">O campo aceita os valores <span class="pill">0</span>, <span class="pill">1</span> ou <span class="pill">2</span>. Em caso de dúvida, consulte o desenvolvedor responsável pelo site.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contato ── -->
+    <div class="contact-section" id="sc">
+      <div class="contact-block">
+        <div class="contact-text">
+          <p>Ficou com alguma dúvida?</p>
+          <p>Entre em contato diretamente pelo WhatsApp ou telefone.</p>
+        </div>
+        <a class="contact-phone" href="tel:+5555999053835">+55 55 99905 3835</a>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<script>
+function loadPreview(input) {
+  const slot = input.closest('.img-slot');
+  const img  = slot.querySelector('img.preview');
+  if (!input.files || !input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => { img.src = e.target.result; slot.classList.add('has-image'); };
+  reader.readAsDataURL(input.files[0]);
+}
+
+// Scroll reveal
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06 });
+
+document.querySelectorAll('.section, .contact-section').forEach(el => io.observe(el));
+
+// Active nav
+const navIO = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('#nav li').forEach(li => li.classList.remove('active'));
+      const li = document.querySelector(`#nav li[data-sec="${e.target.id}"]`);
+      if (li) li.classList.add('active');
+    }
+  });
+}, { threshold: 0.35 });
+
+document.querySelectorAll('.section[id]').forEach(s => navIO.observe(s));
+</script>
+
+</body>
+</html>

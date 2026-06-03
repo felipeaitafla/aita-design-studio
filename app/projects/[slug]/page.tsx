@@ -1,50 +1,151 @@
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import { sanityFetch } from "@/sanity/lib/live";
+import { urlFor } from "@/sanity/lib/image";
+import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
+import type { Project } from "@/sanity/lib/types";
 
-const projects = {
-  "tutz-phone": { name: "Tutz Phone", category: "Landing Page", year: "2024" },
-  "fernando-cavalheiro": { name: "Fernando Cavalheiro", category: "Website", year: "2024" },
-  "studio-branca": { name: "Studio Branca", category: "Identidade Visual", year: "2024" },
-  "arquitetura-noa": { name: "Arquitetura Noã", category: "Website", year: "2023" },
-};
-
-export function generateStaticParams() {
-  return Object.keys(projects).map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const { data } = await sanityFetch({
+    query: PROJECT_SLUGS_QUERY,
+    perspective: "published",
+    stega: false,
+  });
+  return (data as { slug: string }[]) ?? [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = projects[slug as keyof typeof projects];
+  const { data } = await sanityFetch({
+    query: PROJECT_QUERY,
+    params: { slug },
+    stega: false,
+  });
+  const project = data as Project | null;
   if (!project) return {};
   return { title: `${project.name} — Aita Design Studio` };
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = projects[slug as keyof typeof projects];
+  const { data } = await sanityFetch({
+    query: PROJECT_QUERY,
+    params: { slug },
+  });
+  const project = data as Project | null;
 
   if (!project) notFound();
 
+  const allImages = [
+    ...(project.thumbnail ? [project.thumbnail] : []),
+    ...(project.gallery ?? []),
+  ];
+
   return (
-    <>
-      <div className="px-6 pb-4">
-        <Link
-          href="/"
-          className="text-[10px] tracking-widest uppercase text-neutral-400 hover:text-neutral-900 transition-colors"
-        >
-          ← Todos os projetos
-        </Link>
-        <div className="mt-3">
-          <p className="text-[10px] tracking-widest uppercase text-neutral-400 mb-1">
-            {project.category} / {project.year}
-          </p>
-          <h1 className="text-[22px] font-medium leading-snug">{project.name}</h1>
+    <div className="flex-1 flex overflow-hidden">
+
+      {/* Left: stacked images */}
+      <div className="flex-1 overflow-y-auto flex flex-col gap-3">
+        {allImages.map((image, i) => (
+          <div key={image._key ?? i} className="w-full">
+            {image.asset && (
+              <Image
+                src={image.asset.url}
+                alt={image.alt || project.name}
+                width={image.asset.metadata?.dimensions?.width ?? 1200}
+                height={image.asset.metadata?.dimensions?.height ?? 800}
+                style={{ width: "100%", height: "auto" }}
+                sizes="65vw"
+                priority={i === 0}
+                placeholder={image.asset.metadata?.lqip ? "blur" : "empty"}
+                blurDataURL={image.asset.metadata?.lqip}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Right: info panel */}
+      <div
+        className="flex-none flex flex-col justify-between overflow-y-auto border-l border-neutral-100"
+        style={{ width: "clamp(260px, 35%, 420px)", padding: "clamp(20px, 3vh, 40px) clamp(20px, 3vw, 48px)" }}
+      >
+        <div>
+          {/* Name + segment */}
+          <div className="mb-6">
+            <h1
+              className="font-medium leading-tight"
+              style={{ fontSize: "clamp(18px, 2.2vh, 28px)" }}
+            >
+              {project.name}
+            </h1>
+            {project.segment && (
+              <p
+                className="text-neutral-400 font-normal mt-1"
+                style={{ fontSize: "clamp(11px, 1.4vh, 15px)" }}
+              >
+                {project.segment}
+              </p>
+            )}
+            {project.year && (
+              <p
+                className="text-neutral-400 font-normal"
+                style={{ fontSize: "clamp(11px, 1.4vh, 15px)" }}
+              >
+                {project.year}
+              </p>
+            )}
+          </div>
+
+          {/* Category + description */}
+          {(project.category || project.description) && (
+            <div className="border-t border-neutral-200 pt-5">
+              {project.category && (
+                <p
+                  className="tracking-widest uppercase text-neutral-400 mb-3"
+                  style={{ fontSize: "clamp(8px, 1vh, 11px)" }}
+                >
+                  {project.category}
+                </p>
+              )}
+              {project.description && (
+                <p
+                  className="text-neutral-600 leading-relaxed whitespace-pre-line"
+                  style={{ fontSize: "clamp(11px, 1.3vh, 14px)" }}
+                >
+                  {project.description}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Link */}
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-6 text-neutral-400 hover:text-neutral-900 transition-colors tracking-widest uppercase"
+              style={{ fontSize: "clamp(8px, 1vh, 11px)" }}
+            >
+              Visitar site →
+            </a>
+          )}
+        </div>
+
+        {/* Back link at bottom */}
+        <div className="mt-8">
+          <Link
+            href="/"
+            className="text-neutral-300 hover:text-neutral-900 transition-colors tracking-widest uppercase"
+            style={{ fontSize: "clamp(8px, 1vh, 11px)" }}
+          >
+            ← Todos os projetos
+          </Link>
         </div>
       </div>
 
-      <div className="flex-1 px-6 pb-6">
-        <div className="h-full bg-neutral-200" />
-      </div>
-    </>
+    </div>
   );
 }

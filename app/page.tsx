@@ -1,68 +1,29 @@
-import Link from "next/link";
+import { sanityFetch } from "@/sanity/lib/live";
+import { PROJECTS_QUERY } from "@/sanity/lib/queries";
+import HomeScroller from "@/components/HomeScroller";
+import type { ProjectCard } from "@/sanity/lib/types";
 
-const projects = [
-  {
-    slug: "tutz-phone",
-    name: "Tutz Phone",
-    category: "Landing Page",
-    year: "2024",
-  },
-  {
-    slug: "fernando-cavalheiro",
-    name: "Fernando Cavalheiro",
-    category: "Website",
-    year: "2024",
-  },
-  {
-    slug: "studio-branca",
-    name: "Studio Branca",
-    category: "Identidade Visual",
-    year: "2024",
-  },
-  {
-    slug: "arquitetura-noa",
-    name: "Arquitetura Noã",
-    category: "Website",
-    year: "2023",
-  },
-];
+const sidePadding = "24px";
 
-export default function Home() {
+export default async function Home() {
+  const { data } = await sanityFetch({ query: PROJECTS_QUERY });
+  const projects = (data as ProjectCard[]) ?? [];
+
   return (
-    <>
-      <div className="px-6 pb-4">
-        <h1 className="text-[22px] font-medium leading-snug">
-          Estúdio de design digital.
-          <br />
-          Sites para marcas com identidade.
-        </h1>
-      </div>
+    <div className="flex-1 flex flex-col justify-center min-w-0">
+      <div className="h-[63%] flex flex-col">
 
-      <div className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide">
-        <div className="flex h-full pl-6">
-          {projects.map((project, index) => (
-            <Link
-              key={project.slug}
-              href={`/projects/${project.slug}`}
-              className="flex-none flex flex-col group"
-              style={{
-                width: "55vw",
-                marginRight: index < projects.length - 1 ? "1px" : "0",
-              }}
-            >
-              <div className="flex-1 bg-neutral-200 group-hover:bg-neutral-300 transition-colors duration-300" />
-              <div className="flex items-center justify-between py-3 pr-1">
-                <span className="text-[11px] tracking-wide uppercase font-normal">
-                  {project.name}
-                </span>
-                <span className="text-[11px] tracking-wide uppercase text-neutral-400">
-                  {project.category} / {project.year}
-                </span>
-              </div>
-            </Link>
-          ))}
+        <div style={{ paddingLeft: sidePadding }} className="flex-none pb-[2vh]">
+          <h1 style={{ fontSize: "clamp(16px, 3.5vh, 42px)", lineHeight: "110%", letterSpacing: "-0.02em" }}>
+            <span className="font-bold">Estúdio de design digital.</span>
+            <br />
+            <span className="font-normal">Sites para marcas com identidade.</span>
+          </h1>
         </div>
+
+        <HomeScroller projects={projects} />
+
       </div>
-    </>
+    </div>
   );
 }

@@ -1,7 +1,33 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npm run *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(require\\('./node_modules/lenis/package.json'\\).version\\)\")",
+      "Bash(node -e \"const L = require\\('./node_modules/lenis/dist/lenis.cjs'\\); console.log\\(Object.keys\\(L\\)\\)\")",
+      "mcp__Sanity__list_projects",
+      "mcp__Sanity__whoami",
+      "mcp__Sanity__get_sanity_rules",
+      "mcp__Sanity__create_project",
+      "mcp__Sanity__deploy_schema",
+      "Bash(npx tsc *)",
+      "Bash(node -e \"const p = require\\('./node_modules/next-sanity/package.json'\\); console.log\\(p.version, Object.keys\\(p.exports || {}\\).slice\\(0,10\\)\\)\")",
+      "Bash(node -e \"const m = require\\('./node_modules/next-sanity/live'\\); console.log\\(Object.keys\\(m\\)\\)\")",
+      "Bash(node -e \"const p = require\\('./node_modules/next-sanity/package.json'\\); const live = p.exports['./live']; console.log\\(JSON.stringify\\(live, null, 2\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(curl *)",
+      "Bash(npx playwright *)",
+      "Bash(node -e ' *)",
+      "mcp__Sanity__create_documents_from_json",
+      "mcp__Sanity__publish_documents",
+      "Bash(npx next *)",
+      "mcp__Sanity__query_documents",
+      "mcp__Sanity__add_cors_origin"
     ]
   }
 }
