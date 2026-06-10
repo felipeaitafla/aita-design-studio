@@ -44,6 +44,12 @@ export const projectType = defineType({
       type: 'url',
     }),
     defineField({
+      name: 'galleryVideo',
+      title: 'Vídeo da galeria',
+      description: 'Caminho de um vídeo estático servido em /public (ex: /projetos/startech-scroll.mp4). Exibido após o thumbnail.',
+      type: 'string',
+    }),
+    defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',

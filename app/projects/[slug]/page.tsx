@@ -5,6 +5,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { urlFor } from "@/sanity/lib/image";
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import type { Project } from "@/sanity/lib/types";
+import { getHardcodedProject, hardcodedProjects } from "@/lib/hardcodedProjects";
 
 export async function generateStaticParams() {
   const { data } = await sanityFetch({
@@ -12,11 +13,14 @@ export async function generateStaticParams() {
     perspective: "published",
     stega: false,
   });
-  return (data as { slug: string }[]) ?? [];
+  const sanitySlugs = (data as { slug: string }[]) ?? [];
+  return [...hardcodedProjects.map((p) => ({ slug: p.slug })), ...sanitySlugs];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const hardcoded = getHardcodedProject(slug);
+  if (hardcoded) return { title: `${hardcoded.name} — Aita Design Studio` };
   const { data } = await sanityFetch({
     query: PROJECT_QUERY,
     params: { slug },
@@ -29,25 +33,36 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const { data } = await sanityFetch({
-    query: PROJECT_QUERY,
-    params: { slug },
-  });
-  const project = data as Project | null;
+  let project = getHardcodedProject(slug) ?? null;
+
+  if (!project) {
+    const { data } = await sanityFetch({
+      query: PROJECT_QUERY,
+      params: { slug },
+    });
+    project = data as Project | null;
+  }
 
   if (!project) notFound();
-
-  const allImages = [
-    ...(project.thumbnail ? [project.thumbnail] : []),
-    ...(project.gallery ?? []),
-  ];
 
   return (
     <div className="flex-1 flex overflow-hidden">
 
-      {/* Left: stacked images */}
+      {/* Left: stacked gallery (+ optional video). The thumbnail is card-only. */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-3">
-        {allImages.map((image, i) => (
+        {project.galleryVideo && (
+          <div className="w-full">
+            <video
+              src={project.galleryVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+          </div>
+        )}
+        {(project.gallery ?? []).map((image, i) => (
           <div key={image._key ?? i} className="w-full">
             {image.asset && (
               <Image
@@ -57,7 +72,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 height={image.asset.metadata?.dimensions?.height ?? 800}
                 style={{ width: "100%", height: "auto" }}
                 sizes="65vw"
-                priority={i === 0}
+                priority={i === 0 && !project.galleryVideo}
+                unoptimized={image.asset.url.endsWith(".gif")}
                 placeholder={image.asset.metadata?.lqip ? "blur" : "empty"}
                 blurDataURL={image.asset.metadata?.lqip}
               />

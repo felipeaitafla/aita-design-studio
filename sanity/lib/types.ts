@@ -21,8 +21,12 @@ export type Project = {
   year?: number | null
   description?: string | null
   link?: string | null
+  galleryVideo?: string | null
   thumbnail?: SanityImage | null
   gallery?: SanityImage[]
 }
 
-export type ProjectCard = Pick<Project, '_id' | 'name' | 'slug' | 'segment' | 'category' | 'year' | 'thumbnail'>
+export type ProjectCard = Pick<Project, '_id' | 'name' | 'slug' | 'segment' | 'category' | 'year' | 'thumbnail'> & {
+  /** Path to a static thumbnail in /public, used by hardcoded projects instead of a Sanity asset. */
+  staticThumb?: string
+}

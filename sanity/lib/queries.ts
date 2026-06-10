@@ -33,6 +33,7 @@ export const PROJECT_QUERY = defineQuery(`
     year,
     description,
     link,
+    galleryVideo,
     thumbnail {
       asset->{ _id, url, metadata { lqip, dimensions } },
       alt,

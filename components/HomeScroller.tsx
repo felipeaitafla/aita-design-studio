@@ -45,7 +45,15 @@ export default function HomeScroller({ projects }: { projects: ProjectCard[] }) 
             style={{ aspectRatio: "920/460" }}
           >
             <div className="relative flex-1 min-h-0 overflow-hidden bg-neutral-200 group-hover:bg-neutral-300 transition-colors duration-300">
-              {project.thumbnail?.asset && (
+              {project.staticThumb ? (
+                <Image
+                  src={project.staticThumb}
+                  alt={project.name}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                />
+              ) : project.thumbnail?.asset && (
                 <Image
                   src={urlFor(project.thumbnail).width(920).height(460).fit("crop").url()}
                   alt={project.thumbnail.alt || project.name}

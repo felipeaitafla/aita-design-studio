@@ -2,12 +2,13 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { PROJECTS_QUERY } from "@/sanity/lib/queries";
 import HomeScroller from "@/components/HomeScroller";
 import type { ProjectCard } from "@/sanity/lib/types";
+import { hardcodedCards } from "@/lib/hardcodedProjects";
 
 const sidePadding = "24px";
 
 export default async function Home() {
   const { data } = await sanityFetch({ query: PROJECTS_QUERY });
-  const projects = (data as ProjectCard[]) ?? [];
+  const projects = [...hardcodedCards, ...((data as ProjectCard[]) ?? [])];
 
   return (
     <div className="flex-1 flex flex-col justify-center min-w-0">
