@@ -11,8 +11,8 @@ export default async function Home() {
   const projects = [...hardcodedCards, ...((data as ProjectCard[]) ?? [])];
 
   return (
-    <div className="flex-1 flex flex-col justify-center min-w-0">
-      <div className="h-[63%] flex flex-col">
+    <div className="flex-1 flex flex-col md:justify-center min-w-0">
+      <div className="flex flex-col md:h-[63%] pt-[3vh] md:pt-0">
 
         <div style={{ paddingLeft: sidePadding }} className="flex-none pb-[2vh]">
           <h1 style={{ fontSize: "clamp(16px, 3.5vh, 42px)", lineHeight: "110%", letterSpacing: "-0.02em" }}>

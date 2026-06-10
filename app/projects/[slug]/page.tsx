@@ -46,10 +46,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   if (!project) notFound();
 
   return (
-    <div className="flex-1 flex overflow-hidden">
+    <div className="flex-1 flex flex-col-reverse md:flex-row md:overflow-hidden">
 
       {/* Left: stacked gallery (+ optional video). The thumbnail is card-only. */}
-      <div className="flex-1 overflow-y-auto flex flex-col gap-3">
+      <div className="flex flex-col gap-3 md:flex-1 md:overflow-y-auto">
         {project.galleryVideo && (
           <div className="w-full">
             <video
@@ -71,7 +71,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 width={image.asset.metadata?.dimensions?.width ?? 1200}
                 height={image.asset.metadata?.dimensions?.height ?? 800}
                 style={{ width: "100%", height: "auto" }}
-                sizes="65vw"
+                sizes="(min-width: 768px) 65vw, 100vw"
                 priority={i === 0 && !project.galleryVideo}
                 unoptimized={image.asset.url.endsWith(".gif")}
                 placeholder={image.asset.metadata?.lqip ? "blur" : "empty"}
@@ -82,10 +82,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         ))}
       </div>
 
-      {/* Right: info panel */}
+      {/* Right on desktop / top on mobile: info panel */}
       <div
-        className="flex-none flex flex-col justify-between overflow-y-auto border-l border-neutral-100"
-        style={{ width: "clamp(260px, 35%, 420px)", padding: "clamp(20px, 3vh, 40px) clamp(20px, 3vw, 48px)" }}
+        className="w-full md:w-[clamp(260px,35%,420px)] flex-none flex flex-col justify-between md:overflow-y-auto border-b md:border-b-0 md:border-l border-neutral-100"
+        style={{ padding: "clamp(20px, 3vh, 40px) clamp(20px, 3vw, 48px)" }}
       >
         <div>
           {/* Name + segment */}

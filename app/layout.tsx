@@ -23,10 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${funnelSans.variable} h-full`}>
-      <body className="h-full font-sans antialiased bg-white text-neutral-900 overflow-hidden">
-        <div className="h-full flex flex-col">
+      <body className="min-h-full md:h-full font-sans antialiased bg-white text-neutral-900 md:overflow-hidden">
+        <div className="min-h-full md:h-full flex flex-col">
           <Header />
-          <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
+          <main className="flex-1 flex flex-col md:overflow-hidden">{children}</main>
           <Footer />
         </div>
         <SanityLive />

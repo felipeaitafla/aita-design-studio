@@ -17,6 +17,8 @@ export default function HomeScroller({ projects }: { projects: ProjectCard[] }) 
     const wrapper = wrapperRef.current;
     const content = contentRef.current;
     if (!wrapper || !content) return;
+    // Horizontal smooth scroll is desktop-only; mobile uses native vertical scroll.
+    if (!window.matchMedia("(min-width: 768px)").matches) return;
 
     const lenis = new Lenis({
       wrapper,
@@ -31,18 +33,17 @@ export default function HomeScroller({ projects }: { projects: ProjectCard[] }) 
   }, []);
 
   return (
-    <div ref={wrapperRef} className="flex-1 overflow-x-auto overflow-y-hidden scrollbar-hide min-h-0">
+    <div ref={wrapperRef} className="md:flex-1 md:overflow-x-auto md:overflow-y-hidden scrollbar-hide md:min-h-0">
       <div
         ref={contentRef}
-        className="inline-flex h-full gap-3"
+        className="flex flex-col gap-6 pb-10 md:inline-flex md:flex-row md:h-full md:gap-3 md:pb-0"
         style={{ paddingLeft: sidePadding, paddingRight: "24px" }}
       >
         {projects.map((project) => (
           <Link
             key={project._id}
             href={`/projects/${project.slug}`}
-            className="flex-none flex flex-col group"
-            style={{ aspectRatio: "920/460" }}
+            className="group flex flex-col aspect-[920/460] w-full md:w-auto md:h-full md:flex-none"
           >
             <div className="relative flex-1 min-h-0 overflow-hidden bg-neutral-200 group-hover:bg-neutral-300 transition-colors duration-300">
               {project.staticThumb ? (
