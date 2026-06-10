@@ -32,7 +32,7 @@ const tutz: Project = {
   slug: "tutz-phone",
   segment: "Celulares seminovos",
   category: "Landing page",
-  year: 2026,
+  year: 2024,
   link: "https://regular-portion-857373.framer.app/",
   description:
     "A marca precisava de um site que tirasse a Tutz da categoria de \"loja de celular comum\" e a colocasse num patamar aspiracional, à altura dos produtos que vende. Como o cliente não quer só comprar um aparelho, mas viver a experiência de ter aquele aparelho, posicionamos a compra como a realização de um sonho e organizamos a página para reforçar essa percepção de marca premium em cada seção, conduzindo ao WhatsApp.\n\nO eixo criativo foi justamente o \"realizar o sonho\". Em vez de listar produtos de forma seca, construímos uma narrativa em torno do desejo: linguagem aspiracional, produtos apresentados com destaque visual e acabamento cuidado, e uma jornada que valoriza cada etapa da compra como parte da experiência. O resultado é um site que faz o cliente sentir que está entrando em algo especial, não apenas escolhendo um celular, sustentando o posicionamento premium da marca do início ao fim.",
@@ -81,7 +81,7 @@ const pedeProDindo: Project = {
   slug: "pede-pro-dindo",
   segment: "Celulares seminovos",
   category: "Landing page",
-  year: 2026,
+  year: 2024,
   link: "https://www.pedeprodindo.com.br/",
   description:
     "A marca precisava de um site que sustentasse a credibilidade de ser Revenda Autorizada Apple e, ao mesmo tempo, explicasse de forma simples por que comprar um seminovo ali é uma escolha segura e inteligente. Como o público ainda tem receio de comprar aparelho usado, colocamos as provas de confiança logo de cara e desenhamos a página para reforçar o posicionamento da marca e o seu valor como rede.\n\nO eixo criativo foi a economia circular, que é o que diferencia a marca. Em vez de tratar isso como conceito abstrato, traduzimos no ciclo concreto de comprar, trocar e vender, mostrando que o cliente entra e permanece nesse fluxo no seu tempo e do seu jeito. A estrutura da página acompanha essa lógica e organiza um catálogo amplo de forma clara, com prova social e comparativo com a concorrência reforçando a decisão de compra ao longo da navegação.",
@@ -120,15 +120,15 @@ const cesar: Project = {
   thumbnail: {
     asset: {
       _id: "static-cesar-thumb",
-      url: "/projetos/cesar-speaking.webp",
-      metadata: { dimensions: { width: 1440, height: 1440 } },
+      url: "/projetos/cesar-speaking-1.jpg",
+      metadata: { dimensions: { width: 1440, height: 720 } },
     },
     alt: "Cesar Genehr",
   },
   gallery: [],
 };
 
-export const hardcodedProjects: Project[] = [cesar, pedeProDindo, tutz, startech];
+export const hardcodedProjects: Project[] = [cesar, startech, pedeProDindo, tutz];
 
 export const hardcodedCards: ProjectCard[] = hardcodedProjects.map((p) => ({
   _id: p._id,

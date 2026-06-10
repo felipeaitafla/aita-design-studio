@@ -6,6 +6,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { PROJECT_QUERY, PROJECT_SLUGS_QUERY } from "@/sanity/lib/queries";
 import type { Project } from "@/sanity/lib/types";
 import { getHardcodedProject, hardcodedProjects } from "@/lib/hardcodedProjects";
+import DelayedVideo from "@/components/DelayedVideo";
 
 export async function generateStaticParams() {
   const { data } = await sanityFetch({
@@ -52,14 +53,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <div className="flex flex-col gap-3 md:flex-1 md:overflow-y-auto">
         {project.galleryVideo && (
           <div className="w-full">
-            <video
-              src={project.galleryVideo}
-              autoPlay
-              loop
-              muted
-              playsInline
-              style={{ width: "100%", height: "auto", display: "block" }}
-            />
+            <DelayedVideo src={project.galleryVideo} delay={2000} />
           </div>
         )}
         {(project.gallery ?? []).map((image, i) => (

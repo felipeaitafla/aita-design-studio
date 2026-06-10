@@ -8,7 +8,20 @@ const sidePadding = "24px";
 
 export default async function Home() {
   const { data } = await sanityFetch({ query: PROJECTS_QUERY });
-  const projects = [...hardcodedCards, ...((data as ProjectCard[]) ?? [])];
+  const sanityCards = (data as ProjectCard[]) ?? [];
+
+  // Curated home order: Cesar, StarTech, then the Sanity projects (Fernando in
+  // third overall), with Pede Pro Dindo and Tutz pinned to the end (Tutz last).
+  const isFernando = (p: ProjectCard) => p.name?.toLowerCase().includes("fernando");
+  const fernando = sanityCards.filter(isFernando);
+  const otherSanity = sanityCards.filter((p) => !isFernando(p));
+  const pinnedToEnd = ["pede-pro-dindo", "tutz-phone"];
+  const lead = hardcodedCards.filter((p) => !pinnedToEnd.includes(p.slug));
+  const tail = pinnedToEnd
+    .map((slug) => hardcodedCards.find((p) => p.slug === slug))
+    .filter((p): p is ProjectCard => Boolean(p));
+
+  const projects = [...lead, ...fernando, ...otherSanity, ...tail];
 
   return (
     <div className="flex-1 flex flex-col md:justify-center min-w-0">

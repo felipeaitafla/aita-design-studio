@@ -1,8 +1,7 @@
 export default function Footer() {
   const links = [
     { label: "Instagram", href: "https://instagram.com/aitadesignstudio" },
-    { label: "Behance", href: "https://behance.net/aitadesign" },
-    { label: "LinkedIn", href: "https://linkedin.com/company/aitadesign" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/aitadesigner/" },
   ];
 
   return (

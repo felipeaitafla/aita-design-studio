@@ -8,7 +8,9 @@ export default function Header() {
         <Image src="/aita.svg" alt="Aita Design Studio" width={69} height={29} priority />
       </Link>
       <a
-        href="mailto:contato@aitadesign.com"
+        href="https://wa.me/5555999053835"
+        target="_blank"
+        rel="noopener noreferrer"
         className="text-[11px] tracking-widest uppercase hover:opacity-40 transition-opacity mt-0.5"
       >
         → Entrar em Contato
