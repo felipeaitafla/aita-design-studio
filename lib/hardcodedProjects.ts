@@ -120,8 +120,8 @@ const cesar: Project = {
   thumbnail: {
     asset: {
       _id: "static-cesar-thumb",
-      url: "/projetos/hero-poster.webp",
-      metadata: { dimensions: { width: 1920, height: 750 } },
+      url: "/projetos/cesar-speaking.webp",
+      metadata: { dimensions: { width: 1440, height: 1440 } },
     },
     alt: "Cesar Genehr",
   },
